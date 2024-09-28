@@ -57,7 +57,7 @@ end
 
 -- Teleport to the fourth location (-1049, 18, -488) in 50 steps and wait for 1 second
 if smoothTeleportTo(Vector3.new(-1049, 18, -488)) then
-    wait(1) -- Wait for 1 second once the player is at this position
+    wait(3) -- Wait for 1 second once the player is at this position
 end
 
 -- Teleport to the fifth location (1022, 51073, 584) in 50 steps and wait for 16 seconds after arriving
