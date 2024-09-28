@@ -10,6 +10,22 @@ game:GetService('RunService').Stepped:Connect(function()
     end
 end)
 
+-- Function to make the player immune to damage
+local function makeImmune()
+    local player = game.Players.LocalPlayer
+    local character = player.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+
+    if humanoid then
+        humanoid.MaxHealth = math.huge -- Set max health to infinite
+        humanoid.HealthChanged:Connect(function(health)
+            if health < humanoid.MaxHealth then
+                humanoid.Health = humanoid.MaxHealth -- Reset health to max
+            end
+        end)
+    end
+end
+
 -- Function to smoothly teleport in 50 steps
 local function smoothTeleportTo(targetPos)
     local player = game.Players.LocalPlayer
@@ -37,8 +53,9 @@ local function smoothTeleportTo(targetPos)
     return false -- Return false if the teleport failed
 end
 
--- Start noclip
+-- Start noclip and immunity
 noclip = true
+makeImmune() -- Make the player immune to damage
 
 -- Teleport to the first location (1365, 44, -153) in 50 steps
 if smoothTeleportTo(Vector3.new(1365, 44, -153)) then
@@ -55,30 +72,15 @@ if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
     wait(2) -- Optional wait after reaching this position
 end
 
--- Teleport to the fourth location (-1049, 18, -488) in 50 steps and wait for 1 second
+-- Teleport to the fourth location (-1049, 18, -488) in 50 steps and wait for 3 seconds
 if smoothTeleportTo(Vector3.new(-1047.5889892578125, 18.27899932861328, -479.7900085449219)) then
     wait(3) -- Wait for 3 seconds once the player is at this position
 end
 
-if smoothTeleportTo(Vector3.new(1248, 51302, 442)) then
-    wait(0.3) -- Wait for 1 second once the player is at this position
-end
-
-if smoothTeleportTo(Vector3.new(992, 51196, 586)) then
-    wait(0.3) -- Wait for 1 second once the player is at this position
-end
 
 -- Teleport to the fifth location (1022, 51073, 584) in 50 steps and wait for 16 seconds after arriving
 if smoothTeleportTo(Vector3.new(1009, 51101, 592)) then
     wait(16) -- Wait for 16 seconds after arriving at this position
-end
-
-if smoothTeleportTo(Vector3.new(992, 51196, 586)) then
-    wait(0.3) -- Wait for 1 second once the player is at this position
-end
-
-if smoothTeleportTo(Vector3.new(1248, 51302, 442)) then
-    wait(0.3) -- Wait for 1 second once the player is at this position
 end
 
 
@@ -91,6 +93,7 @@ if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
     -- Optional wait after returning to the position
     wait(0) 
 end
+
 -- Teleport back to the third location (2121, 26, 424) in 50 steps
 if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
     -- Optional wait after returning to the position
