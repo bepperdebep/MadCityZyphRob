@@ -66,7 +66,11 @@ if smoothTeleportTo(Vector3.new(1022, 51073, 584)) then
 end
 
 -- Turn noclip off before teleporting back
-noclip = false
+noclip = true
+
+if smoothTeleportTo(Vector3.new(1234, 51045, 386)) then
+    wait(2) 
+end
 
 -- Teleport back to the third location (2121, 26, 424) in 50 steps
 if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
