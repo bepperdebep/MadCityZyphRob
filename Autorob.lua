@@ -10,14 +10,15 @@ game:GetService('RunService').Stepped:Connect(function()
     end
 end)
 
--- Function to smoothly teleport in specified steps
-local function smoothTeleportTo(targetPos, steps)
+-- Function to smoothly teleport in 50 steps
+local function smoothTeleportTo(targetPos)
     local player = game.Players.LocalPlayer
     local character = player.Character
     local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
     
     if humanoidRootPart then
         local currentPos = humanoidRootPart.Position
+        local steps = 50 -- 50 steps for smoother teleportation
         local stepSize = (targetPos - currentPos) / steps
         
         for i = 1, steps do
@@ -28,9 +29,9 @@ local function smoothTeleportTo(targetPos, steps)
         -- Ensure the player is at the exact target position
         humanoidRootPart.CFrame = CFrame.new(targetPos)
         
-        -- Return true once the player is at the destination
+        -- Wait only once the player has arrived at the target position
         if (humanoidRootPart.Position - targetPos).magnitude < 1 then
-            return true
+            return true -- Return true once the player is at the destination
         end
     end
     return false -- Return false if the teleport failed
@@ -39,34 +40,38 @@ end
 -- Start noclip
 noclip = true
 
--- Teleport to the fourth location (-1049, 18, -488) in 50 steps and wait for 3 seconds
-if smoothTeleportTo(Vector3.new(-1049, 18, -488), 50) then
-    wait(3) -- Wait for 3 seconds once the player is at this position
+-- Teleport to the first location (1365, 44, -153) in 50 steps
+if smoothTeleportTo(Vector3.new(1365, 44, -153)) then
+    wait(2) -- Wait for 2 seconds after reaching the position
 end
 
--- Teleport to the next location (1229, 51420, 404) in 5 steps
-if smoothTeleportTo(Vector3.new(1229, 51420, 404), 5) then
-    -- No wait after arriving at this position
+-- Teleport to the second location (1308, 144, -138) in 50 steps and wait for 22 seconds after arriving
+if smoothTeleportTo(Vector3.new(1308, 144, -138)) then
+    wait(22) -- Wait for 22 seconds after arriving at the position
 end
 
--- Teleport to the next location (978, 51302, 602) in 5 steps
-if smoothTeleportTo(Vector3.new(978, 51302, 602), 5) then
-    -- No wait after arriving at this position
+-- Teleport to the third location (2121, 26, 424) in 50 steps
+if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
+    wait(2) -- Optional wait after reaching this position
 end
 
-noclip = false
+-- Teleport to the fourth location (-1049, 18, -488) in 50 steps and wait for 1 second
+if smoothTeleportTo(Vector3.new(-1049, 18, -488)) then
+    wait(1) -- Wait for 1 second once the player is at this position
+end
 
--- Teleport to the fifth location (1022, 51073, 584) in 50 steps
-if smoothTeleportTo(Vector3.new(1022, 51073, 584), 50) then
+-- Teleport to the fifth location (1022, 51073, 584) in 50 steps and wait for 16 seconds after arriving
+if smoothTeleportTo(Vector3.new(1022, 51073, 584)) then
     wait(16) -- Wait for 16 seconds after arriving at this position
 end
 
--- Turn noclip back on before teleporting back
-noclip = true
+-- Turn noclip off before teleporting back
+noclip = false
 
 -- Teleport back to the third location (2121, 26, 424) in 50 steps
-if smoothTeleportTo(Vector3.new(2121, 26, 424), 50) then
-    wait(2) -- Optional wait after returning to the position
+if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
+    -- Optional wait after returning to the position
+    wait(2) 
 end
 
 -- Stop noclip after all teleports
