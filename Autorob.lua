@@ -77,7 +77,18 @@ end
 -- Teleport back to the third location (2121, 26, 424) in 50 steps
 if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
     -- Optional wait after returning to the position
-    wait(2) 
+    wait(0) 
+end
+-- Teleport back to the third location (2121, 26, 424) in 50 steps
+if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
+    -- Optional wait after returning to the position
+    wait(0) 
+end
+
+-- Teleport back to the third location (2121, 26, 424) in 50 steps
+if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
+    -- Optional wait after returning to the position
+    wait(0) 
 end
 
 -- Stop noclip after all teleports
