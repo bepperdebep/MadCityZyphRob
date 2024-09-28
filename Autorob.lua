@@ -34,7 +34,7 @@ local function smoothTeleportTo(targetPos)
     
     if humanoidRootPart then
         local currentPos = humanoidRootPart.Position
-        local steps = 50 -- 50 steps for smoother teleportation
+        local steps = 25 -- 50 steps for smoother teleportation
         local stepSize = (targetPos - currentPos) / steps
         
         for i = 1, steps do
