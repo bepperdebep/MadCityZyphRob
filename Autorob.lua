@@ -54,10 +54,14 @@ if smoothTeleportTo(Vector3.new(978, 51302, 602), 5) then
     -- No wait after arriving at this position
 end
 
--- Teleport to the fifth location (1022, 51073, 584) in 50 steps and wait for 16 seconds after arriving
+-- Teleport to the fifth location (1022, 51073, 584) in 50 steps
 if smoothTeleportTo(Vector3.new(1022, 51073, 584), 50) then
+    noclip = false -- Remove noclip instantly when arriving
     wait(16) -- Wait for 16 seconds after arriving at this position
 end
+
+-- Turn noclip back on before teleporting back
+noclip = true
 
 -- Teleport back to the third location (2121, 26, 424) in 50 steps
 if smoothTeleportTo(Vector3.new(2121, 26, 424), 50) then
