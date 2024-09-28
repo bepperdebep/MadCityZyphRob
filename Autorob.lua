@@ -57,8 +57,7 @@ end
 noclip = false
 
 -- Teleport to the fifth location (1022, 51073, 584) in 50 steps
-if smoothTeleportTo(Vector3.new(1023, 51073, 585), 50) then
-
+if smoothTeleportTo(Vector3.new(1022, 51073, 584), 50) then
     wait(16) -- Wait for 16 seconds after arriving at this position
 end
 
@@ -72,3 +71,6 @@ end
 
 -- Stop noclip after all teleports
 noclip = false
+
+-- Reset the character
+game.Players.LocalPlayer.Character:BreakJoints()
