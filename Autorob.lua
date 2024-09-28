@@ -56,7 +56,7 @@ if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
 end
 
 -- Teleport to the fourth location (-1049, 18, -488) in 50 steps and wait for 1 second
-if smoothTeleportTo(Vector3.new(-1049, 18, -488)) then
+if smoothTeleportTo(Vector3.new(-1047.5889892578125, 18.27899932861328, -479.7900085449219)) then
     wait(3) -- Wait for 1 second once the player is at this position
 end
 
@@ -68,7 +68,7 @@ end
 -- Turn noclip off before teleporting back
 noclip = true
 
-if smoothTeleportTo(Vector3.new(1234, 51045, 386)) then
+if smoothTeleportTo(Vector3.new(1231.141845703125, 51051.234375, 381.09619140625)) then
     wait(2) 
 end
 
