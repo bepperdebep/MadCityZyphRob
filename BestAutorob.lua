@@ -18,7 +18,7 @@ end)
 
 -- Function to smoothly teleport to specified coordinates
 local function smoothTeleportTo(targetPosition)
-    local steps = 100 -- Number of steps for smoother teleportation
+    local steps = 50 -- Number of steps for smoother teleportation
     local currentPosition = hrp.Position
     local stepSize = (targetPosition - currentPosition) / steps
 
