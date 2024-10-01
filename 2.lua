@@ -16,26 +16,26 @@ runService.Stepped:Connect(function()
     end
 end)
 
--- Function to smoothly teleport to specified coordinates
+-- Function to smoothly teleport to specified coordinates without anchoring
 local function smoothTeleportTo(targetPosition)
     local steps = 25 -- Number of steps for smoother teleportation
     local currentPosition = hrp.Position
     local stepSize = (targetPosition - currentPosition) / steps
 
-    -- Anchor HumanoidRootPart to avoid falling
-    hrp.Anchored = true
+    -- Temporarily disable gravity to prevent falling
+    character.Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
 
     for i = 1, steps do
         hrp.CFrame = hrp.CFrame + CFrame.new(stepSize)
-        wait(0.05) -- Adjust speed of teleportation
+        wait(0.01) -- Adjust speed of teleportation (faster for quicker teleport)
     end
 
     -- Ensure the player is at the exact target position
     hrp.CFrame = CFrame.new(targetPosition)
-    
-    -- Unanchor after reaching the destination
+
+    -- Restore gravity after teleportation
     wait(0.5)
-    hrp.Anchored = false
+    character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
 end
 
 -- Function to handle Cash objects
