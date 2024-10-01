@@ -5,7 +5,7 @@ local hrp = character:WaitForChild("HumanoidRootPart")
 
 -- Noclip function to allow passing through walls
 local runService = game:GetService("RunService")
-local noclip = true
+local noclip = false
 runService.Stepped:Connect(function()
     if noclip then
         for _, v in pairs(character:GetDescendants()) do
