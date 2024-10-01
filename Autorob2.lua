@@ -31,8 +31,8 @@ local function smoothTeleportTo(targetPosition)
     hrp.CFrame = CFrame.new(targetPosition)
 end
 
--- Loop through all children in workspace.ObjectSelection
-for _, object in pairs(workspace.ObjectSelection:GetChildren()) do
+-- Function to handle Cash objects
+local function handleCashObject(object)
     if object:FindFirstChild("Cash") and object.Cash:FindFirstChild("Cash") then
         local cashModel = object.Cash
         local cashEvent = cashModel.Cash:FindFirstChild("Event")
@@ -53,4 +53,43 @@ for _, object in pairs(workspace.ObjectSelection:GetChildren()) do
     end
 end
 
-print("Finished firing all Cash events.")
+-- Function to handle SmashCash objects
+local function handleSmashCashObject(object)
+    if object:FindFirstChild("SmashCash") then
+        local smashCashModel = object.SmashCash
+        -- Look for another SmashCash inside
+        if smashCashModel:FindFirstChild("SmashCash") then
+            local innerSmashCash = smashCashModel.SmashCash
+            local smashEvent = innerSmashCash:FindFirstChild("Event")
+            
+            -- Check if the event exists and is a RemoteEvent
+            if smashEvent and smashEvent:IsA("RemoteEvent") then
+                -- Get the position of the SmashCash model or one of its parts
+                local targetPosition = smashCashModel:FindFirstChild("PrimaryPart") and smashCashModel.PrimaryPart.Position or smashCashModel.Position
+
+                -- Teleport to the SmashCash object and fire its event
+                smoothTeleportTo(targetPosition) -- Teleport to the SmashCash object
+                wait(0.5) -- Wait a moment after teleporting
+                smashEvent:FireServer()
+                print("Fired SmashCash event at:", object.Name)
+            else
+                print("SmashCash event not found in:", object.Name)
+            end
+        end
+    end
+end
+
+-- Loop through all children in workspace.ObjectSelection
+for _, object in pairs(workspace.ObjectSelection:GetChildren()) do
+    -- Handle "Cash" objects
+    if object:FindFirstChild("Cash") then
+        handleCashObject(object)
+    end
+    
+    -- Handle "SmashCash" objects
+    if object:FindFirstChild("SmashCash") then
+        handleSmashCashObject(object)
+    end
+end
+
+print("Finished firing all Cash and SmashCash events.")
