@@ -69,7 +69,7 @@ local function handleSmashCashObject(object)
 
                 -- Smoothly teleport to the SmashCash object and fire its event
                 smoothTeleportTo(targetPosition) -- Smooth teleport to the SmashCash object
-                wait(0.5) -- Wait a moment after teleporting
+                wait(2) -- Wait a moment after teleporting
                 smashEvent:FireServer()
                 print("Fired SmashCash event at:", object.Name)
             else
