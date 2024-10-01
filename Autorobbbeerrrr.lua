@@ -16,9 +16,19 @@ runService.Stepped:Connect(function()
     end
 end)
 
--- Function to teleport to specified coordinates instantly
-local function fastTeleportTo(targetPosition)
-    hrp.CFrame = CFrame.new(targetPosition) -- Teleport instantly to the target position
+-- Function to smoothly teleport to specified coordinates
+local function smoothTeleportTo(targetPosition)
+    local steps = 25 -- Increase the number of steps to make the teleport smoother
+    local currentPosition = hrp.Position
+    local stepSize = (targetPosition - currentPosition) / steps
+
+    for i = 1, steps do
+        hrp.Position = hrp.Position + stepSize
+        wait(0.05) -- Increase speed of steps if needed
+    end
+
+    -- Ensure the player is at the exact target position
+    hrp.CFrame = CFrame.new(targetPosition)
 end
 
 -- Function to handle Cash objects
@@ -32,9 +42,9 @@ local function handleCashObject(object)
             -- Get the position of the Cash model or one of its parts
             local targetPosition = cashModel:FindFirstChild("PrimaryPart") and cashModel.PrimaryPart.Position or cashModel.Position
             
-            -- Teleport to the Cash object and fire its event
-            fastTeleportTo(targetPosition) -- Instantly teleport to the Cash object
-            wait(1.0) -- Wait a moment after teleporting
+            -- Smoothly teleport to the Cash object and fire its event
+            smoothTeleportTo(targetPosition) -- Smooth teleport to the Cash object
+            wait(0.5) -- Wait a moment after teleporting
             cashEvent:FireServer()
             print("Fired Cash event at:", object.Name)
         else
@@ -57,9 +67,9 @@ local function handleSmashCashObject(object)
                 -- Get the position of the SmashCash model or one of its parts
                 local targetPosition = smashCashModel:FindFirstChild("PrimaryPart") and smashCashModel.PrimaryPart.Position or smashCashModel.Position
 
-                -- Teleport to the SmashCash object and fire its event
-                fastTeleportTo(targetPosition) -- Instantly teleport to the SmashCash object
-                wait(1.0) -- Wait a moment after teleporting
+                -- Smoothly teleport to the SmashCash object and fire its event
+                smoothTeleportTo(targetPosition) -- Smooth teleport to the SmashCash object
+                wait(0.5) -- Wait a moment after teleporting
                 smashEvent:FireServer()
                 print("Fired SmashCash event at:", object.Name)
             else
