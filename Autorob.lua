@@ -51,3 +51,4 @@ if cashEvent and cashEvent:IsA("RemoteEvent") then
 else
     print("Cash event not found.")
 end
+
