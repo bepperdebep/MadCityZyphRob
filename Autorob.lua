@@ -1,113 +1,73 @@
--- Noclip function
-local noclip = true -- Set to true to activate noclip
-game:GetService('RunService').Stepped:Connect(function()
+-- Get the Local Player and HumanoidRootPart
+local lp = game.Players.LocalPlayer
+local character = lp.Character or lp.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- Noclip function to allow passing through walls
+local runService = game:GetService("RunService")
+local noclip = true
+runService.Stepped:Connect(function()
     if noclip then
-        for _, v in pairs(game.Players.LocalPlayer.Character:GetDescendants()) do
-            if v:IsA("BasePart") and v.CanCollide == true then
+        for _, v in pairs(character:GetDescendants()) do
+            if v:IsA("BasePart") and v.CanCollide then
                 v.CanCollide = false
             end
         end
     end
 end)
 
--- Function to make the player immune to damage
-local function makeImmune()
-    local player = game.Players.LocalPlayer
-    local character = player.Character
-    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-
-    if humanoid then
-        humanoid.MaxHealth = math.huge -- Set max health to infinite
-        humanoid.HealthChanged:Connect(function(health)
-            if health < humanoid.MaxHealth then
-                humanoid.Health = humanoid.MaxHealth -- Reset health to max
-            end
-        end)
-    end
-end
-
--- Function to smoothly teleport in 50 steps
-local function smoothTeleportTo(targetPos)
-    local player = game.Players.LocalPlayer
-    local character = player.Character
-    local humanoidRootPart = character and character:FindFirstChild("HumanoidRootPart")
+-- Function to smoothly teleport in steps
+local function smoothTeleportTo(targetPos, steps)
+    local currentPos = hrp.Position
+    local stepSize = (targetPos - currentPos) / steps
     
-    if humanoidRootPart then
-        local currentPos = humanoidRootPart.Position
-        local steps = 25 -- 50 steps for smoother teleportation
-        local stepSize = (targetPos - currentPos) / steps
-        
-        for i = 1, steps do
-            humanoidRootPart.CFrame = humanoidRootPart.CFrame + stepSize
-            wait(0.05) -- Adjust speed of teleportation (0.05 seconds per step)
-        end
-        
-        -- Ensure the player is at the exact target position
-        humanoidRootPart.CFrame = CFrame.new(targetPos)
-        
-        -- Wait only once the player has arrived at the target position
-        if (humanoidRootPart.Position - targetPos).magnitude < 1 then
-            return true -- Return true once the player is at the destination
-        end
+    for i = 1, steps do
+        hrp.CFrame = hrp.CFrame + stepSize
+        wait(0.05) -- Adjust speed of teleportation (0.05 seconds per step)
+    end
+
+    -- Ensure the player is at the exact target position
+    hrp.CFrame = CFrame.new(targetPos)
+
+    -- Return true once the player is at the destination
+    if (hrp.Position - targetPos).magnitude < 1 then
+        return true
     end
     return false -- Return false if the teleport failed
 end
 
--- Start noclip and immunity
-noclip = true
-makeImmune() -- Make the player immune to damage
-
--- Teleport to the first location (1365, 44, -153) in 50 steps
-if smoothTeleportTo(Vector3.new(1365, 44, -153)) then
-    wait(2) -- Wait for 2 seconds after reaching the position
+-- Collect all SmashCash parts
+local smashCashParts = {}
+for _, part in pairs(workspace.ObjectSelection:GetDescendants()) do
+    if part:IsA("Part") and part.Name == "SmashCash" then
+        table.insert(smashCashParts, part)
+    end
 end
 
--- Teleport to the second location (1308, 144, -138) in 50 steps and wait for 22 seconds after arriving
-if smoothTeleportTo(Vector3.new(1308, 144, -138)) then
-    wait(22) -- Wait for 22 seconds after arriving at the position
+-- Check if there are any SmashCash parts
+if #smashCashParts > 0 then
+    -- Select a random SmashCash part
+    local randomPart = smashCashParts[math.random(1, #smashCashParts)]
+    
+    -- Smoothly teleport to the random SmashCash part
+    smoothTeleportTo(randomPart.Position + Vector3.new(0, 3, 0), 25) -- Add a small vertical offset
+
+    print("Teleported to", randomPart.Name)
+
+    -- Access the specific RemoteEvent inside the SmashCash object
+    local cashEvent = randomPart:FindFirstChild("Cash") and randomPart.Cash:FindFirstChild("Cash") and randomPart.Cash.Cash.Event
+
+    -- Check if the event exists and is a RemoteEvent
+    if cashEvent and cashEvent:IsA("RemoteEvent") then
+        -- Fire the RemoteEvent
+        cashEvent:FireServer()
+        print("Fired Cash event inside", randomPart.Name)
+    else
+        print("Cash event not found inside", randomPart.Name)
+    end
+else
+    print("No SmashCash parts found.")
 end
 
--- Teleport to the third location (2121, 26, 424) in 50 steps
-if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
-    wait(2) -- Optional wait after reaching this position
-end
-
--- Teleport to the fourth location (-1049, 18, -488) in 50 steps and wait for 3 seconds
-if smoothTeleportTo(Vector3.new(-1047.5889892578125, 18.27899932861328, -479.7900085449219)) then
-    wait(3) -- Wait for 3 seconds once the player is at this position
-end
-
-
--- Teleport to the fifth location (1022, 51073, 584) in 50 steps and wait for 16 seconds after arriving
-if smoothTeleportTo(Vector3.new(1009, 51101, 592)) then
-    wait(16) -- Wait for 16 seconds after arriving at this position
-end
-
-
-if smoothTeleportTo(Vector3.new(1231.141845703125, 51051.234375, 381.09619140625)) then
-    wait(2) 
-end
-
--- Teleport back to the third location (2121, 26, 424) in 50 steps
-if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
-    -- Optional wait after returning to the position
-    wait(0) 
-end
-
--- Teleport back to the third location (2121, 26, 424) in 50 steps
-if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
-    -- Optional wait after returning to the position
-    wait(0) 
-end
-
--- Teleport back to the third location (2121, 26, 424) in 50 steps
-if smoothTeleportTo(Vector3.new(2121, 26, 424)) then
-    -- Optional wait after returning to the position
-    wait(0) 
-end
-
--- Stop noclip after all teleports
+-- Stop noclip after the action
 noclip = false
-
--- Reset the character
-game.Players.LocalPlayer.Character:BreakJoints()
