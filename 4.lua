@@ -93,3 +93,15 @@ for _, object in pairs(workspace.ObjectSelection:GetChildren()) do
 end
 
 print("Finished firing all Cash and SmashCash events.")
+
+-- Hop to a different server
+local TeleportService = game:GetService("TeleportService")
+local placeId = game.PlaceId
+
+-- Function to hop servers
+local function hopServers()
+    TeleportService:Teleport(placeId, lp) -- Teleport to the same game
+end
+
+wait(1) -- Wait a moment before hopping
+hopServers()
