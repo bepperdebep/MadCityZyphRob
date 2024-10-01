@@ -32,19 +32,19 @@ local function smoothTeleportTo(targetPart)
     hrp.CFrame = CFrame.new(targetPosition)
 end
 
--- Target the specific Cash.Cash object
-local targetObject = workspace.ObjectSelection:GetChildren()[136].Cash.Cash
+-- Target the specific Cash object
+local targetObject = workspace.ObjectSelection:GetChildren()[136].Cash
 
 -- Check if the target object is valid
 if targetObject and targetObject:IsA("Part") then
-    -- Teleport to the Cash.Cash object
+    -- Teleport to the Cash object
     smoothTeleportTo(targetObject)
     
     -- Wait a moment after teleporting
     wait(0.5) -- Adjust the wait time if needed
 
-    -- Fire the RemoteEvent
-    local cashEvent = targetObject:FindFirstChild("Event")
+    -- Fire the RemoteEvent inside Cash
+    local cashEvent = targetObject:FindFirstChild("Cash") and targetObject.Cash:FindFirstChild("Event")
     if cashEvent and cashEvent:IsA("RemoteEvent") then
         cashEvent:FireServer()
         print("Fired Cash event inside", targetObject.Name)
@@ -52,5 +52,5 @@ if targetObject and targetObject:IsA("Part") then
         print("Cash event not found inside", targetObject.Name)
     end
 else
-    print("Target Cash.Cash object is invalid or not found.")
+    print("Target Cash object is invalid or not found.")
 end
