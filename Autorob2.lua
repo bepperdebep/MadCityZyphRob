@@ -39,8 +39,11 @@ for _, object in pairs(workspace.ObjectSelection:GetChildren()) do
 
         -- Check if the event exists and is a RemoteEvent
         if cashEvent and cashEvent:IsA("RemoteEvent") then
+            -- Get the position of the Cash model or one of its parts
+            local targetPosition = cashModel:FindFirstChild("PrimaryPart") and cashModel.PrimaryPart.Position or cashModel.Position
+            
             -- Teleport to the Cash object and fire its event
-            smoothTeleportTo(object.Position) -- Teleport to the Cash object
+            smoothTeleportTo(targetPosition) -- Teleport to the Cash object
             wait(0.5) -- Wait a moment after teleporting
             cashEvent:FireServer()
             print("Fired Cash event at:", object.Name)
