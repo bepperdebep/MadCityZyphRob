@@ -16,10 +16,9 @@ runService.Stepped:Connect(function()
     end
 end)
 
--- Function to smoothly teleport to a target part
-local function smoothTeleportTo(targetPart)
+-- Function to smoothly teleport to specified coordinates
+local function smoothTeleportTo(targetPosition)
     local steps = 25 -- Number of steps for smoother teleportation
-    local targetPosition = targetPart.Position
     local currentPosition = hrp.Position
     local stepSize = (targetPosition - currentPosition) / steps
 
@@ -32,25 +31,23 @@ local function smoothTeleportTo(targetPart)
     hrp.CFrame = CFrame.new(targetPosition)
 end
 
--- Target the specific Cash object
-local targetObject = workspace.ObjectSelection:GetChildren()[136].Cash
+-- Target coordinates
+local targetPosition = Vector3.new(1557.40185546875, 24.229877471923828, 1253.985107421875)
 
--- Check if the target object is valid
-if targetObject and targetObject:IsA("Part") then
-    -- Teleport to the Cash object
-    smoothTeleportTo(targetObject)
-    
-    -- Wait a moment after teleporting
-    wait(0.5) -- Adjust the wait time if needed
+-- Teleport to the specified coordinates
+smoothTeleportTo(targetPosition)
 
-    -- Fire the RemoteEvent inside Cash
-    local cashEvent = targetObject:FindFirstChild("Cash") and targetObject.Cash:FindFirstChild("Event")
-    if cashEvent and cashEvent:IsA("RemoteEvent") then
-        cashEvent:FireServer()
-        print("Fired Cash event inside", targetObject.Name)
-    else
-        print("Cash event not found inside", targetObject.Name)
-    end
+-- Wait a moment after teleporting
+wait(0.5) -- Adjust the wait time if needed
+
+-- Access the specific RemoteEvent inside the Cash object
+local cashEvent = workspace.ObjectSelection:GetChildren()[136].Cash:FindFirstChild("Cash") and workspace.ObjectSelection:GetChildren()[136].Cash.Cash:FindFirstChild("Event")
+
+-- Check if the event exists and is a RemoteEvent
+if cashEvent and cashEvent:IsA("RemoteEvent") then
+    -- Fire the RemoteEvent
+    cashEvent:FireServer()
+    print("Fired Cash event.")
 else
-    print("Target Cash object is invalid or not found.")
+    print("Cash event not found.")
 end
