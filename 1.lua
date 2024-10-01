@@ -3,9 +3,9 @@ local lp = game.Players.LocalPlayer
 local character = lp.Character or lp.CharacterAdded:Wait()
 local hrp = character:WaitForChild("HumanoidRootPart")
 
--- Noclip function to allow passing through walls (disabled for now)
+-- Noclip function to allow passing through walls
 local runService = game:GetService("RunService")
-local noclip = false
+local noclip = true
 runService.Stepped:Connect(function()
     if noclip then
         for _, v in pairs(character:GetDescendants()) do
@@ -18,17 +18,24 @@ end)
 
 -- Function to smoothly teleport to specified coordinates
 local function smoothTeleportTo(targetPosition)
-    local steps = 25 -- Increase the number of steps to make the teleport smoother
+    local steps = 25 -- Number of steps for smoother teleportation
     local currentPosition = hrp.Position
     local stepSize = (targetPosition - currentPosition) / steps
 
+    -- Anchor HumanoidRootPart to avoid falling
+    hrp.Anchored = true
+
     for i = 1, steps do
-        hrp.Position = hrp.Position + stepSize
-        wait(0.05) -- Increase speed of steps if needed
+        hrp.CFrame = hrp.CFrame + CFrame.new(stepSize)
+        wait(0.05) -- Adjust speed of teleportation
     end
 
     -- Ensure the player is at the exact target position
     hrp.CFrame = CFrame.new(targetPosition)
+    
+    -- Unanchor after reaching the destination
+    wait(0.5)
+    hrp.Anchored = false
 end
 
 -- Function to handle Cash objects
@@ -39,11 +46,14 @@ local function handleCashObject(object)
 
         -- Check if the event exists and is a RemoteEvent
         if cashEvent and cashEvent:IsA("RemoteEvent") then
-            -- Get the position of the Cash model or one of its parts
-            local targetPosition = cashModel:FindFirstChild("PrimaryPart") and cashModel.PrimaryPart.Position or cashModel.Position
+            -- Get the position of the Cash model
+            local targetPosition = cashModel.Position
             
-            -- Smoothly teleport to the Cash object and fire its event
-            smoothTeleportTo(targetPosition) -- Smooth teleport to the Cash object
+            -- Enable noclip during teleport to avoid walls
+            noclip = true
+            smoothTeleportTo(targetPosition) -- Teleport to the Cash object
+            noclip = false -- Disable noclip after reaching
+            
             wait(0.5) -- Wait a moment after teleporting
             cashEvent:FireServer()
             print("Fired Cash event at:", object.Name)
@@ -64,11 +74,14 @@ local function handleSmashCashObject(object)
             
             -- Check if the event exists and is a RemoteEvent
             if smashEvent and smashEvent:IsA("RemoteEvent") then
-                -- Get the position of the SmashCash model or one of its parts
-                local targetPosition = smashCashModel:FindFirstChild("PrimaryPart") and smashCashModel.PrimaryPart.Position or smashCashModel.Position
+                -- Get the position of the SmashCash model
+                local targetPosition = smashCashModel.Position
 
-                -- Smoothly teleport to the SmashCash object and fire its event
-                smoothTeleportTo(targetPosition) -- Smooth teleport to the SmashCash object
+                -- Enable noclip during teleport
+                noclip = true
+                smoothTeleportTo(targetPosition) -- Teleport to the SmashCash object
+                noclip = false -- Disable noclip after reaching
+                
                 wait(0.5) -- Wait a moment after teleporting
                 smashEvent:FireServer()
                 print("Fired SmashCash event at:", object.Name)
