@@ -18,13 +18,13 @@ end)
 
 -- Function to smoothly teleport to specified coordinates
 local function smoothTeleportTo(targetPosition)
-    local steps = 25 -- Number of steps for smoother teleportation
+    local steps = 100 -- Number of steps for smoother teleportation
     local currentPosition = hrp.Position
     local stepSize = (targetPosition - currentPosition) / steps
 
     for i = 1, steps do
         hrp.Position = hrp.Position + stepSize
-        wait(0.05) -- Adjust speed of teleportation
+        wait(1.05) -- Adjust speed of teleportation
     end
 
     -- Ensure the player is at the exact target position
