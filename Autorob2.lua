@@ -24,7 +24,7 @@ local function smoothTeleportTo(targetPosition)
 
     for i = 1, steps do
         hrp.Position = hrp.Position + stepSize
-        wait(0.15) -- Adjust speed of teleportation
+        wait(0.14) -- Adjust speed of teleportation
     end
 
     -- Ensure the player is at the exact target position
