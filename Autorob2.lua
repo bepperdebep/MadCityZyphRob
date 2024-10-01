@@ -31,23 +31,23 @@ local function smoothTeleportTo(targetPosition)
     hrp.CFrame = CFrame.new(targetPosition)
 end
 
--- Target coordinates
-local targetPosition = Vector3.new(1557.40185546875, 24.229877471923828, 1253.985107421875)
+-- Loop through all children in workspace.ObjectSelection
+for _, object in pairs(workspace.ObjectSelection:GetChildren()) do
+    if object:FindFirstChild("Cash") and object.Cash:FindFirstChild("Cash") then
+        local cashModel = object.Cash
+        local cashEvent = cashModel.Cash:FindFirstChild("Event")
 
--- Teleport to the specified coordinates
-smoothTeleportTo(targetPosition)
-
--- Wait a moment after teleporting
-wait(0.5) -- Adjust the wait time if needed
-
--- Access the specific RemoteEvent inside the Cash object
-local cashEvent = workspace.ObjectSelection:GetChildren()[136].Cash:FindFirstChild("Cash") and workspace.ObjectSelection:GetChildren()[136].Cash.Cash:FindFirstChild("Event")
-
--- Check if the event exists and is a RemoteEvent
-if cashEvent and cashEvent:IsA("RemoteEvent") then
-    -- Fire the RemoteEvent
-    cashEvent:FireServer()
-    print("Fired Cash event.")
-else
-    print("Cash event not found.")
+        -- Check if the event exists and is a RemoteEvent
+        if cashEvent and cashEvent:IsA("RemoteEvent") then
+            -- Teleport to the Cash object and fire its event
+            smoothTeleportTo(object.Position) -- Teleport to the Cash object
+            wait(0.5) -- Wait a moment after teleporting
+            cashEvent:FireServer()
+            print("Fired Cash event at:", object.Name)
+        else
+            print("Cash event not found in:", object.Name)
+        end
+    end
 end
+
+print("Finished firing all Cash events.")
