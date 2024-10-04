@@ -24,18 +24,18 @@ function searchForObjects()
     return foundObjects
 end
 
--- Function to fly to a target position using Humanoid:MoveTo()
+-- Function to "fly" to a target position using CFrame manipulation
 function flyToPosition(position)
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
-    local humanoid = character:WaitForChild("Humanoid")
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     
-    -- Command the Humanoid to move to the target position
-    humanoid:MoveTo(position)
-
-    -- Wait until the character is close to the target position
-    while (character.HumanoidRootPart.Position - position).magnitude > 5 do
-        wait(0.1)
+    -- Define fly speed and step increments
+    local flySpeed = 100
+    while (humanoidRootPart.Position - position).magnitude > 5 do
+        -- Move smoothly towards the target position using CFrame
+        humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(position), 0.1)
+        wait(0.05)
     end
 end
 
