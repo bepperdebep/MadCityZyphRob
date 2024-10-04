@@ -30,11 +30,11 @@ function flyToPosition(position)
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     
-    -- Define fly speed and step increments
-    local flySpeed = 100
+    -- Define a slower fly speed and step increments
+    local flySpeed = 0.02  -- Smaller value for slower flight
     while (humanoidRootPart.Position - position).magnitude > 5 do
         -- Move smoothly towards the target position using CFrame
-        humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(position), 0.1)
+        humanoidRootPart.CFrame = humanoidRootPart.CFrame:Lerp(CFrame.new(position), flySpeed)
         wait(0.05)
     end
 end
